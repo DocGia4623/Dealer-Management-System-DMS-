@@ -8,12 +8,11 @@ namespace CompanyDealer.BLL.DTOs.OrderDTOs
 {
     public class CreateOrderRequest
     {
-        public string OrderNumber { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
         public string CustomerContact { get; set; } = string.Empty;
         public Guid DealerId { get; set; }
+        public OrderItemRequest[] OrderItems { get; set; } = Array.Empty<OrderItemRequest>();
     }
 }

@@ -370,10 +370,6 @@ namespace CompanyDealer.DAL.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("OrderNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -386,6 +382,33 @@ namespace CompanyDealer.DAL.Migrations
                     b.HasIndex("DealerId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("CompanyDealer.DAL.Models.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("CompanyDealer.DAL.Models.Promotion", b =>
@@ -854,6 +877,25 @@ namespace CompanyDealer.DAL.Migrations
                     b.Navigation("Dealer");
                 });
 
+            modelBuilder.Entity("CompanyDealer.DAL.Models.OrderItem", b =>
+                {
+                    b.HasOne("CompanyDealer.DAL.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CompanyDealer.DAL.Models.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("CompanyDealer.DAL.Models.Quotation", b =>
                 {
                     b.HasOne("CompanyDealer.DAL.Models.Category", "Category")
@@ -1001,6 +1043,8 @@ namespace CompanyDealer.DAL.Migrations
             modelBuilder.Entity("CompanyDealer.DAL.Models.Order", b =>
                 {
                     b.Navigation("Bill");
+
+                    b.Navigation("OrderItems");
 
                     b.Navigation("Quotations");
 

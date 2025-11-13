@@ -31,11 +31,11 @@ namespace CompanyDealer.DAL.Repository
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
 
-        public async Task<Order?> GetByOrderNumberAsync(string orderNumber)
+        public async Task<Order?> GetByOrderNumberAsync(Guid orderId)
         {
             return await _context.Orders
                 .Include(o => o.Dealer)
-                .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber);
+                .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
         public async Task<Order> CreateAsync(Order order)
@@ -64,5 +64,7 @@ namespace CompanyDealer.DAL.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        
     }
 }

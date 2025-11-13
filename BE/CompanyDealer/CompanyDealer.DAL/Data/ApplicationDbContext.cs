@@ -33,6 +33,7 @@ namespace CompanyDealer.DAL.Data
         public DbSet<SaleContract> SaleContracts { get; set; } = null!;
         public DbSet<InventoryVehicle> InventoryVehicles { get; set; } = null!; 
         public DbSet<RestockRequest> RestockRequests { get; set; } = null!; 
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -217,6 +218,34 @@ namespace CompanyDealer.DAL.Data
                 .WithMany()
                 .HasForeignKey(r => r.VehicleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Explicitly configure OrderItem -> Order relationship
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.ToTable("OrderItem");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.UnitPrice)
+                      .HasColumnType("numeric");
+
+                entity.Property(e => e.Quantity)
+                      .HasColumnType("integer");
+
+                
+                entity.HasOne(e => e.Order)
+                      .WithMany(o => o.OrderItems)
+                      .HasForeignKey(e => e.OrderId)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .IsRequired();
+
+                
+                entity.HasOne(e => e.Vehicle)
+                      .WithMany()
+                      .HasForeignKey(e => e.VehicleId)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .IsRequired();
+            });
         }
     }
 }

@@ -6,7 +6,6 @@ namespace CompanyDealer.DAL.Models
     public class Order
     {
         public Guid Id { get; set; }
-        public string OrderNumber { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
@@ -22,6 +21,7 @@ namespace CompanyDealer.DAL.Models
         public Bill? Bill { get; set; }
 
         // Collections
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public ICollection<Promotion> Promotions { get; set; } = new List<Promotion>();
         public ICollection<Quotation> Quotations { get; set; } = new List<Quotation>();
     }
